@@ -134,9 +134,9 @@ public class ClienteDAO implements IClienteDAO {
             if (stm != null && !stm.isClosed()){
                 stm.close();
             }
-            if (connection != null && !connection.isClosed()){
-                connection.close();
-            }
+//            if (connection != null && !connection.isClosed()){
+//                connection.close();
+//            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -163,9 +163,8 @@ public class ClienteDAO implements IClienteDAO {
 
     private String getSqlDelete() {
         StringBuilder sb = new StringBuilder();
-        sb.append("UPDATE TB_CLIENTE ");
-        sb.append("SET NOME = ?, CODIGO = ? ");
-        sb.append("WHERE ID = ?");
+        sb.append("DELETE FROM TB_CLIENTE ");
+        sb.append("WHERE CODIGO = ?");
         return sb.toString();
     }
 
