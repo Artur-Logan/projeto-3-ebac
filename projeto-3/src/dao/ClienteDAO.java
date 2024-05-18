@@ -38,7 +38,7 @@ public class ClienteDAO implements IClienteDAO {
             connection = ConnectionFactory.getConnection();
             String sql = getSqlUpdate();
             stm = connection.prepareStatement(sql);
-            adicionarParametrosInsert(stm, cliente);
+            adicionarParametrosUpdate(stm, cliente);
             return stm.executeUpdate();
         } catch (Exception e){
             throw e;
@@ -88,7 +88,7 @@ public class ClienteDAO implements IClienteDAO {
             connection = ConnectionFactory.getConnection();
             String sql = getSqlSelectAll();
             stm = connection.prepareStatement(sql);
-            rs = stm.getResultSet();
+            rs = stm.executeQuery();
 
             while (rs.next()){
                 cliente = new Cliente();
@@ -151,13 +151,19 @@ public class ClienteDAO implements IClienteDAO {
     }
 
     private void adicionarParametrosInsert(PreparedStatement stm, Cliente cliente) throws SQLException {
-        stm.setString(1, cliente.getCodigo());
-        stm.setString(2, cliente.getNome());
+        stm.setString(1, cliente.getNome());
+        stm.setString(2, cliente.getCodigo());
+    }
+
+    private void adicionarParametrosUpdate(PreparedStatement stm, Cliente cliente) throws SQLException {
+        stm.setString(1, cliente.getNome());
+        stm.setString(2, cliente.getCodigo());
+        stm.setLong(3, cliente.getId());
     }
 
     private String getSqlSelectAll() {
         StringBuilder sb = new StringBuilder();
-        sb.append("SELECT * FROM TB_CLIENTE_2");
+        sb.append("SELECT * FROM TB_CLIENTE");
         return sb.toString();
     }
 
@@ -170,7 +176,7 @@ public class ClienteDAO implements IClienteDAO {
 
     private String getSqlInsert() {
         StringBuilder sb = new StringBuilder();
-        sb.append("INSERT INTO TB_CLIENTE (ID, CODIGO, NOME) ");
+        sb.append("INSERT INTO TB_CLIENTE (ID, NOME, CODIGO) ");
         sb.append("VALUES (nextval('SQ_CLIENTE'),?,?)");
         return sb.toString();
     }
